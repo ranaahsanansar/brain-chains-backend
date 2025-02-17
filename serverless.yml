@@ -1,0 +1,30 @@
+service: brainchains
+
+frameworkVersion: '4.3.3'
+
+provider:
+  name: aws
+  architecture: arm64
+  memorySize: 128
+  timeout: 15
+  region: ap-south-1
+  runtime: nodejs20.x
+  stage: dev
+  logRetentionInDays: 1
+  apiGateway:
+    minimumCompressionSize: 1024
+    binaryMediaTypes:
+      - 'multipart/form-data'
+      - 'application/octet-stream'
+
+functions:
+  api:
+    handler: dist/lambda.handler
+    events:
+      - httpApi:
+          method: ANY
+          path: /{proxy+}
+
+plugins:
+  - serverless-offline
+  - serverless-jetpack
